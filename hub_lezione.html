@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creatore Lezioni Cinese</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        .chinese-text {
+            font-family: 'SimSun', 'Microsoft YaHei', serif;
+            line-height: 1.8;
+        }
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-red-50 to-yellow-50 min-h-full">
+    <div class="container mx-auto px-4 py-6 max-w-6xl">
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-red-800 mb-2">📚 Creatore Lezioni Cinese</h1>
+            <p class="text-gray-600">Crea le tue lezioni personalizzate di lingua cinese</p>
+            
+<button class="inline-flex items-center justify-center rounded-md px-4 py-2 text-base text-white font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 bg-gradient-to-r from-red-500 to-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 active:transform active:scale-95" onclick="window.history.back()">
+   <span class="mr-2"> <svg class="w-6 h-6" fill="none" stroke="#EF4444" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+</svg> </span>home
+</button>        </header>
+
+        <!-- Navigation -->
+        <nav class="flex justify-center mb-8">
+            <div class="bg-white rounded-lg shadow-md p-2 flex space-x-2">
+                <button id="createBtn" class="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors">
+                    ✏️ Crea Lezione
+                </button>
+                <button id="viewBtn" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors">
+                    📖 Visualizza Lezioni
+                </button>
+            </div>
+        </nav>
+
+        <!-- Create Lesson Section -->
+        <div id="createSection" class="bg-white rounded-xl shadow-lg p-8 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Crea Nuova Lezione</h2>
+            
+            <form id="lessonForm" class="space-y-6">
+                <!-- Lesson Title -->
+                <div>
+                    <label for="lessonTitle" class="block text-sm font-medium text-gray-700 mb-2">Titolo della Lezione</label>
+                    <input type="text" id="lessonTitle" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="Es: Lezione 1 - Saluti">
+                </div>
+
+                <!-- Grammar Section -->
+                <div class="border border-gray-200 rounded-lg p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">📝 Grammatica</h3>
+                        <button type="button" id="addGrammarBtn" class="px-3 py-1 bg-red-100 text-red-600 rounded-md hover:bg-red-200 transition-colors text-sm">
+                            ➕ Aggiungi Regola
+                        </button>
+                    </div>
+                    <div id="grammarContainer" class="space-y-6">
+                        <div class="grammar-item border-l-4 border-red-300 pl-4">
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Argomento Grammaticale</label>
+                                    <input type="text" class="grammar-title w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="Es: Struttura delle frasi base">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Spiegazione</label>
+                                    <textarea rows="4" class="grammar-content w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="Inserisci la spiegazione grammaticale..."></textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Esempi</label>
+                                    <textarea rows="3" class="grammar-examples w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent chinese-text" placeholder="我是学生。(Wǒ shì xuéshēng) - Io sono uno studente."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Characters Section -->
+                <div class="border border-gray-200 rounded-lg p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">🈳 Caratteri</h3>
+                        <button type="button" id="addCharacterBtn" class="px-3 py-1 bg-yellow-100 text-yellow-600 rounded-md hover:bg-yellow-200 transition-colors text-sm">
+                            ➕ Aggiungi Gruppo
+                        </button>
+                    </div>
+                    <div id="charactersContainer" class="space-y-6">
+                        <div class="character-item border-l-4 border-yellow-300 pl-4">
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Tema Caratteri</label>
+                                    <input type="text" class="character-title w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="Es: Numeri da 1 a 10">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Lista Caratteri</label>
+                                    <textarea rows="6" class="character-content w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent chinese-text" placeholder="一 (yī) - uno&#10;二 (èr) - due&#10;三 (sān) - tre"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Text Section -->
+                <div class="border border-gray-200 rounded-lg p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">📄 Piccoli Testi</h3>
+                        <button type="button" id="addTextBtn" class="px-3 py-1 bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 transition-colors text-sm">
+                            ➕ Aggiungi Testo
+                        </button>
+                    </div>
+                    <div id="textsContainer" class="space-y-6">
+                        <div class="text-item border-l-4 border-blue-300 pl-4">
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Titolo del Testo</label>
+                                    <input type="text" class="text-title w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="Es: Presentarsi">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Testo in Cinese</label>
+                                    <textarea rows="4" class="text-chinese w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent chinese-text" placeholder="你好！我叫李明。我是学生。"></textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Pinyin</label>
+                                    <textarea rows="3" class="text-pinyin w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="Nǐ hǎo! Wǒ jiào Lǐ Míng. Wǒ shì xuéshēng."></textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Traduzione</label>
+                                    <textarea rows="3" class="text-translation w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="Ciao! Mi chiamo Li Ming. Sono uno studente."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-red-600 text-white py-3 px-6 rounded-lg hover:bg-red-700 transition-colors font-semibold">
+                    💾 Salva Lezione
+                </button>
+
+    <button id="exportBtn" type="button" class="mt-4 w-full bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition-colors font-semibold">
+    ⬇️ Esporta come HTML
+</button>
+            </form>
+        </div>
+
+        <!-- View Lessons Section -->
+        <div id="viewSection" class="hidden">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">Le Tue Lezioni</h2>
+                    <button id="clearAllBtn" class="px-4 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-colors">
+                        🗑️ Cancella Tutto
+                    </button>
+                </div>
+                <div id="lessonsList" class="space-y-4">
+                    <p class="text-gray-500 text-center py-8">Nessuna lezione creata ancora. Inizia creando la tua prima lezione!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lesson Detail Modal -->
+        <div id="lessonModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div class="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-full overflow-y-auto">
+                <div class="p-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 id="modalTitle" class="text-2xl font-bold text-gray-800"></h2>
+                        <button id="closeModal" class="text-gray-500 hover:text-gray-700 text-2xl">✕</button>
+                    </div>
+                    <div id="modalContent" class="space-y-8"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State management
+        let lessons = JSON.parse(localStorage.getItem('chineseLessons')) || [];
+        
+        // DOM elements
+        const createBtn = document.getElementById('createBtn');
+        const viewBtn = document.getElementById('viewBtn');
+        const createSection = document.getElementById('createSection');
+        const viewSection = document.getElementById('viewSection');
+        const lessonForm = document.getElementById('lessonForm');
+        const lessonsList = document.getElementById('lessonsList');
+        const lessonModal = document.getElementById('lessonModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalContent = document.getElementById('modalContent');
+        const closeModal = document.getElementById('closeModal');
+        const clearAllBtn = document.getElementById('clearAllBtn');
+
+        // Navigation
+        createBtn.addEventListener('click', () => {
+            createBtn.classList.add('bg-red-600', 'text-white');
+            createBtn.classList.remove('bg-gray-200', 'text-gray-700');
+            viewBtn.classList.add('bg-gray-200', 'text-gray-700');
+            viewBtn.classList.remove('bg-red-600', 'text-white');
+            createSection.classList.remove('hidden');
+            viewSection.classList.add('hidden');
+        });
+
+        viewBtn.addEventListener('click', () => {
+            viewBtn.classList.add('bg-red-600', 'text-white');
+            viewBtn.classList.remove('bg-gray-200', 'text-gray-700');
+            createBtn.classList.add('bg-gray-200', 'text-gray-700');
+            createBtn.classList.remove('bg-red-600', 'text-white');
+            viewSection.classList.remove('hidden');
+            createSection.classList.add('hidden');
+            displayLessons();
+        });
+
+        // Add grammar rule
+        document.getElementById('addGrammarBtn').addEventListener('click', () => {
+            const container = document.getElementById('grammarContainer');
+            const newItem = document.createElement('div');
+            newItem.className = 'grammar-item border-l-4 border-red-300 pl-4 fade-in';
+            newItem.innerHTML = `
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-sm text-gray-600">Regola Grammaticale</span>
+                    <button type="button" class="remove-grammar text-red-500 hover:text-red-700 text-sm">🗑️ Rimuovi</button>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Argomento Grammaticale</label>
+                        <input type="text" class="grammar-title w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="Es: Uso dei classificatori">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Spiegazione</label>
+                        <textarea rows="4" class="grammar-content w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="Inserisci la spiegazione grammaticale..."></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Esempi</label>
+                        <textarea rows="3" class="grammar-examples w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent chinese-text" placeholder="一本书 (yī běn shū) - un libro"></textarea>
+                    </div>
+                </div>
+            `;
+            container.appendChild(newItem);
+            
+            // Add remove functionality
+            newItem.querySelector('.remove-grammar').addEventListener('click', () => {
+                newItem.remove();
+            });
+        });
+
+        // Add character group
+        document.getElementById('addCharacterBtn').addEventListener('click', () => {
+            const container = document.getElementById('charactersContainer');
+            const newItem = document.createElement('div');
+            newItem.className = 'character-item border-l-4 border-yellow-300 pl-4 fade-in';
+            newItem.innerHTML = `
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-sm text-gray-600">Gruppo Caratteri</span>
+                    <button type="button" class="remove-character text-yellow-600 hover:text-yellow-800 text-sm">🗑️ Rimuovi</button>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Tema Caratteri</label>
+                        <input type="text" class="character-title w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="Es: Colori">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Lista Caratteri</label>
+                        <textarea rows="6" class="character-content w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent chinese-text" placeholder="红 (hóng) - rosso&#10;蓝 (lán) - blu&#10;绿 (lǜ) - verde"></textarea>
+                    </div>
+                </div>
+            `;
+            container.appendChild(newItem);
+            
+            // Add remove functionality
+            newItem.querySelector('.remove-character').addEventListener('click', () => {
+                newItem.remove();
+            });
+        });
+
+        // Add text
+        document.getElementById('addTextBtn').addEventListener('click', () => {
+            const container = document.getElementById('textsContainer');
+            const newItem = document.createElement('div');
+            newItem.className = 'text-item border-l-4 border-blue-300 pl-4 fade-in';
+            newItem.innerHTML = `
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-sm text-gray-600">Testo</span>
+                    <button type="button" class="remove-text text-blue-600 hover:text-blue-800 text-sm">🗑️ Rimuovi</button>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Titolo del Testo</label>
+                        <input type="text" class="text-title w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="Es: Al ristorante">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Testo in Cinese</label>
+                        <textarea rows="4" class="text-chinese w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent chinese-text" placeholder="我想要一杯茶。"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Pinyin</label>
+                        <textarea rows="3" class="text-pinyin w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="Wǒ xiǎng yào yī bēi chá."></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Traduzione</label>
+                        <textarea rows="3" class="text-translation w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="Vorrei una tazza di tè."></textarea>
+                    </div>
+                </div>
+            `;
+            container.appendChild(newItem);
+            
+            // Add remove functionality
+            newItem.querySelector('.remove-text').addEventListener('click', () => {
+                newItem.remove();
+            });
+        });
+
+        // Form submission
+        lessonForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Collect grammar rules
+            const grammarItems = [];
+            document.querySelectorAll('.grammar-item').forEach(item => {
+                const title = item.querySelector('.grammar-title').value;
+                const content = item.querySelector('.grammar-content').value;
+                const examples = item.querySelector('.grammar-examples').value;
+                if (title || content || examples) {
+                    grammarItems.push({ title, content, examples });
+                }
+            });
+
+            // Collect character groups
+            const characterItems = [];
+            document.querySelectorAll('.character-item').forEach(item => {
+                const title = item.querySelector('.character-title').value;
+                const content = item.querySelector('.character-content').value;
+                if (title || content) {
+                    characterItems.push({ title, content });
+                }
+            });
+
+            // Collect texts
+            const textItems = [];
+            document.querySelectorAll('.text-item').forEach(item => {
+                const title = item.querySelector('.text-title').value;
+                const chinese = item.querySelector('.text-chinese').value;
+                const pinyin = item.querySelector('.text-pinyin').value;
+                const translation = item.querySelector('.text-translation').value;
+                if (title || chinese || pinyin || translation) {
+                    textItems.push({ title, chinese, pinyin, translation });
+                }
+            });
+
+            const lesson = {
+                id: Date.now(),
+                title: document.getElementById('lessonTitle').value,
+                grammar: grammarItems,
+                characters: characterItems,
+                texts: textItems,
+                createdAt: new Date().toLocaleDateString('it-IT')
+            };
+
+            lessons.push(lesson);
+            localStorage.setItem('chineseLessons', JSON.stringify(lessons));
+            
+            // Reset form
+            lessonForm.reset();
+            
+            // Reset containers to single items
+            resetContainers();
+            
+            // Show success message
+            showSuccessMessage();
+        });
+
+        function resetContainers() {
+            // Reset grammar container
+            const grammarContainer = document.getElementById('grammarContainer');
+            grammarContainer.innerHTML = `
+                <div class="grammar-item border-l-4 border-red-300 pl-4">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Argomento Grammaticale</label>
+                            <input type="text" class="grammar-title w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="Es: Struttura delle frasi base">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Spiegazione</label>
+                            <textarea rows="4" class="grammar-content w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="Inserisci la spiegazione grammaticale..."></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Esempi</label>
+                            <textarea rows="3" class="grammar-examples w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent chinese-text" placeholder="我是学生。(Wǒ shì xuéshēng) - Io sono uno studente."></textarea>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Reset characters container
+            const charactersContainer = document.getElementById('charactersContainer');
+            charactersContainer.innerHTML = `
+                <div class="character-item border-l-4 border-yellow-300 pl-4">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Tema Caratteri</label>
+                            <input type="text" class="character-title w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="Es: Numeri da 1 a 10">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Lista Caratteri</label>
+                            <textarea rows="6" class="character-content w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent chinese-text" placeholder="一 (yī) - uno&#10;二 (èr) - due&#10;三 (sān) - tre"></textarea>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Reset texts container
+            const textsContainer = document.getElementById('textsContainer');
+            textsContainer.innerHTML = `
+                <div class="text-item border-l-4 border-blue-300 pl-4">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Titolo del Testo</label>
+                            <input type="text" class="text-title w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="Es: Presentarsi">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Testo in Cinese</label>
+                            <textarea rows="4" class="text-chinese w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent chinese-text" placeholder="你好！我叫李明。我是学生。"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Pinyin</label>
+                            <textarea rows="3" class="text-pinyin w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="Nǐ hǎo! Wǒ jiào Lǐ Míng. Wǒ shì xuéshēng."></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Traduzione</label>
+                            <textarea rows="3" class="text-translation w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="Ciao! Mi chiamo Li Ming. Sono uno studente."></textarea>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showSuccessMessage() {
+            const successDiv = document.createElement('div');
+            successDiv.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 fade-in';
+            successDiv.textContent = '✅ Lezione salvata con successo!';
+            document.body.appendChild(successDiv);
+            
+            setTimeout(() => {
+                successDiv.remove();
+            }, 3000);
+        }
+
+        function displayLessons() {
+            if (lessons.length === 0) {
+                lessonsList.innerHTML = '<p class="text-gray-500 text-center py-8">Nessuna lezione creata ancora. Inizia creando la tua prima lezione!</p>';
+                return;
+            }
+
+            lessonsList.innerHTML = lessons.map(lesson => `
+                <div class="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow cursor-pointer" onclick="openLessonModal(${lesson.id})">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-lg font-semibold text-gray-800">${lesson.title}</h3>
+                        <div class="flex space-x-2">
+                            <span class="text-sm text-gray-500">${lesson.createdAt}</span>
+                            <button onclick="event.stopPropagation(); deleteLesson(${lesson.id})" class="text-red-500 hover:text-red-700">🗑️</button>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4 text-sm text-gray-600">
+                        <div>📝 ${lesson.grammar?.length || 0} regole grammaticali</div>
+                        <div>🈳 ${lesson.characters?.length || 0} gruppi caratteri</div>
+                        <div>📄 ${lesson.texts?.length || 0} testi</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openLessonModal(lessonId) {
+            const lesson = lessons.find(l => l.id === lessonId);
+            if (!lesson) return;
+
+            modalTitle.textContent = lesson.title;
+            let modalHTML = '<div class="space-y-8">';
+
+            // Grammar Section
+            if (lesson.grammar && lesson.grammar.length > 0) {
+                modalHTML += '<div class="border-l-4 border-red-500 pl-6">';
+                modalHTML += '<h3 class="text-xl font-semibold text-gray-800 mb-4">📝 Grammatica</h3>';
+                modalHTML += '<div class="space-y-6">';
+                
+                lesson.grammar.forEach((grammar, index) => {
+                    if (grammar.title || grammar.content || grammar.examples) {
+                        modalHTML += `
+                            <div class="bg-red-50 p-4 rounded-lg">
+                                <h4 class="font-semibold text-red-800 mb-3">${grammar.title || `Regola ${index + 1}`}</h4>
+                                ${grammar.content ? `
+                                    <div class="mb-3">
+                                        <h5 class="font-medium text-gray-700 mb-2">Spiegazione:</h5>
+                                        <p class="text-gray-600 leading-relaxed">${grammar.content.replace(/\n/g, '<br>')}</p>
+                                    </div>
+                                ` : ''}
+                                ${grammar.examples ? `
+                                    <div>
+                                        <h5 class="font-medium text-gray-700 mb-2">Esempi:</h5>
+                                        <div class="bg-white p-3 rounded chinese-text">${grammar.examples.replace(/\n/g, '<br>')}</div>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `;
+                    }
+                });
+                
+                modalHTML += '</div></div>';
+            }
+
+            // Characters Section
+            if (lesson.characters && lesson.characters.length > 0) {
+                modalHTML += '<div class="border-l-4 border-yellow-500 pl-6">';
+                modalHTML += '<h3 class="text-xl font-semibold text-gray-800 mb-4">🈳 Caratteri</h3>';
+                modalHTML += '<div class="space-y-6">';
+                
+                lesson.characters.forEach((character, index) => {
+                    if (character.title || character.content) {
+                        modalHTML += `
+                            <div class="bg-yellow-50 p-4 rounded-lg">
+                                <h4 class="font-semibold text-yellow-800 mb-3">${character.title || `Gruppo ${index + 1}`}</h4>
+                                ${character.content ? `
+                                    <div class="bg-white p-3 rounded chinese-text text-lg leading-loose">
+                                        ${character.content.replace(/\n/g, '<br>')}
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `;
+                    }
+                });
+                
+                modalHTML += '</div></div>';
+            }
+
+            // Texts Section
+            if (lesson.texts && lesson.texts.length > 0) {
+                modalHTML += '<div class="border-l-4 border-blue-500 pl-6">';
+                modalHTML += '<h3 class="text-xl font-semibold text-gray-800 mb-4">📄 Piccoli Testi</h3>';
+                modalHTML += '<div class="space-y-6">';
+                
+                lesson.texts.forEach((text, index) => {
+                    if (text.title || text.chinese || text.pinyin || text.translation) {
+                        modalHTML += `
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <h4 class="font-semibold text-blue-800 mb-3">${text.title || `Testo ${index + 1}`}</h4>
+                                <div class="space-y-3">
+                                    ${text.chinese ? `
+                                        <div>
+                                            <h5 class="font-medium text-gray-700 mb-2">Testo Cinese:</h5>
+                                            <div class="bg-white p-3 rounded chinese-text text-lg">${text.chinese.replace(/\n/g, '<br>')}</div>
+                                        </div>
+                                    ` : ''}
+                                    ${text.pinyin ? `
+                                        <div>
+                                            <h5 class="font-medium text-gray-700 mb-2">Pinyin:</h5>
+                                            <div class="bg-white p-3 rounded">${text.pinyin.replace(/\n/g, '<br>')}</div>
+                                        </div>
+                                    ` : ''}
+                                    ${text.translation ? `
+                                        <div>
+                                            <h5 class="font-medium text-gray-700 mb-2">Traduzione:</h5>
+                                            <div class="bg-white p-3 rounded">${text.translation.replace(/\n/g, '<br>')}</div>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+                
+                modalHTML += '</div></div>';
+            }
+
+            modalHTML += '</div>';
+            modalContent.innerHTML = modalHTML;
+
+            lessonModal.classList.remove('hidden');
+        }
+
+        function deleteLesson(lessonId) {
+            if (confirm('Sei sicuro di voler eliminare questa lezione?')) {
+                lessons = lessons.filter(l => l.id !== lessonId);
+                localStorage.setItem('chineseLessons', JSON.stringify(lessons));
+                displayLessons();
+            }
+        }
+
+        // Modal controls
+        closeModal.addEventListener('click', () => {
+            lessonModal.classList.add('hidden');
+        });
+
+        lessonModal.addEventListener('click', (e) => {
+            if (e.target === lessonModal) {
+                lessonModal.classList.add('hidden');
+            }
+        });
+
+        // Clear all lessons
+        clearAllBtn.addEventListener('click', () => {
+            if (confirm('Sei sicuro di voler eliminare tutte le lezioni? Questa azione non può essere annullata.')) {
+                lessons = [];
+                localStorage.setItem('chineseLessons', JSON.stringify(lessons));
+                displayLessons();
+            }
+        });
+
+        // Initialize
+        displayLessons();
+
+// Funzione salvataggio 
+document.getElementById('exportBtn').addEventListener('click', function() {
+    const lessonTitle = document.getElementById('lessonTitle').value;
+    // Puoi raccogliere anche altre parti del form, come grammatica, caratteri, testi...
+    const grammars = [];
+    document.querySelectorAll('.grammar-item').forEach(item => {
+        grammars.push({
+            argomento: item.querySelector('.grammar-title').value,
+            spiegazione: item.querySelector('.grammar-content').value,
+            esempi: item.querySelector('.grammar-examples').value
+        });
+    });
+    const characters = [];
+    document.querySelectorAll('.character-item').forEach(item => {
+        characters.push({
+            tema: item.querySelector('.character-title').value,
+            lista: item.querySelector('.character-content').value
+        });
+    });
+    const texts = [];
+    document.querySelectorAll('.text-item').forEach(item => {
+        texts.push({
+            titolo: item.querySelector('.text-title').value,
+            cinese: item.querySelector('.text-chinese').value,
+            pinyin: item.querySelector('.text-pinyin').value,
+            traduzione: item.querySelector('.text-translation').value
+        });
+    });
+
+    // Crea il contenuto HTML
+    const htmlContent = `
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>${lessonTitle}</title>
+<!-- Puoi aggiungere stili o link a CSS esterni qui -->
+</head>
+<body>
+<h1>${lessonTitle}</h1>
+
+<h2>Grammatica</h2>
+${grammars.map(g => `
+<div>
+<h3>${g.argomento}</h3>
+<p>${g.spiegazione}</p>
+<pre>${g.esempi}</pre>
+</div>
+`).join('')}
+
+<h2>Caratteri</h2>
+${characters.map(c => `
+<div>
+<h3>${c.tema}</h3>
+<pre>${c.lista}</pre>
+</div>
+`).join('')}
+
+<h2>Testi</h2>
+${texts.map(t => `
+<div>
+<h3>${t.titolo}</h3>
+<p><strong>Cinese:</strong> ${t.cinese}</p>
+<p><strong>Pinyin:</strong> ${t.pinyin}</p>
+<p><strong>Traduzione:</strong> ${t.traduzione}</p>
+</div>
+`).join('')}
+</body>
+</html>`;
+
+    // Crea un Blob e avvia il download
+    const blob = new Blob([htmlContent], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${lessonTitle}.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+});
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9902a0d83489d7df',t:'MTc2MDczMzgwNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

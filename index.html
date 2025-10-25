@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio Creativo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+<style>/* Stili creativi */
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+}
+
+.floating {
+    animation: float 3s ease-in-out infinite;
+}
+
+.creative-card {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.1);
+}</style></head>
+<body class="bg-black text-white overflow-x-hidden">
+    <div class="min-h-screen flex items-center justify-center relative">
+        <div class="absolute inset-0 bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 opacity-50"></div>
+        
+        <div class="relative z-10 text-center">
+            <h1 class="text-8xl font-bold mb-8 bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">
+                Le mie app
+            </h1>
+            <p class="text-2xl mb-12 text-gray-300">Generatore di esercizi, grammatica, vocabolario</p>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+                <div class="group cursor-pointer">
+                    <div class="w-32 h-32 bg-gradient-to-br from-pink-500 to-red-500 rounded-full mx-auto mb-4 group-hover:scale-110 transition-transform flex items-center justify-center">
+                     <a href="quiz-cinese_app.html" ><span class="text-4xl">📝</span></a>
+                    </div>
+                    <p class="text-sm">Esercizi</p>
+                </div>
+                
+                <div class="group cursor-pointer">
+                    <div class="w-32 h-32 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full mx-auto mb-4 group-hover:scale-110 transition-transform flex items-center justify-center">
+                      <a href="hub_lezione.html">  <span class="text-4xl">📖</span> </a>
+                    </div>
+                    <p class="text-sm">lezioni</p>
+                </div>
+                
+                <div class="group cursor-pointer">
+                    <div class="w-32 h-32 bg-gradient-to-br from-green-500 to-teal-500 rounded-full mx-auto mb-4 group-hover:scale-110 transition-transform flex items-center justify-center">
+                    <a href="vocabolario-creator.html">    <span class="text-4xl">📗</span> </a>
+                    </div>
+                    <p class="text-sm">vocabolario</p>
+                </div>
+                
+                <div class="group cursor-pointer">
+                    <div class="w-32 h-32 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-full mx-auto mb-4 group-hover:scale-110 transition-transform flex items-center justify-center">
+                      <a href="lettore-pdf.html">  <span class="text-4xl">📚</span></a>
+                    </div>
+                    <p class="text-sm">lettore-pdf</p>
+                </div>
+            </div>
+        </div>
+        
+        
+<script>// Animazioni creative
+document.addEventListener('DOMContentLoaded', function() {
+    // Parallax effect
+    window.addEventListener('scroll', function() {
+        const scrolled = window.pageYOffset;
+        const parallax = document.querySelector('.absolute.inset-0');
+        if (parallax) {
+            parallax.style.transform = `translateY(${scrolled * 0.5}px)`;
+        }
+    });
+    
+    // Hover effects
+    const circles = document.querySelectorAll('.group');
+    circles.forEach(circle => {
+        circle.addEventListener('mouseenter', function() {
+            this.style.transform = 'scale(1.1)';
+        });
+        
+        circle.addEventListener('mouseleave', function() {
+            this.style.transform = 'scale(1)';
+        });
+    });
+});</script></body>
+</html>
