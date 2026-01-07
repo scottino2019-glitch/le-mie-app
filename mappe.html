@@ -71,13 +71,15 @@
       position: relative;
       flex: 1;
       overflow: auto;
+      -webkit-overflow-scrolling: touch;
     }
     
     #canvas {
       position: relative;
       width: 100%;
       height: 100%;
-      min-height: 600px;
+      min-height: 800px;
+      min-width: 100%;
     }
     
     svg {
@@ -92,13 +94,13 @@
     
     .node {
       position: absolute;
-      padding: 20px 30px;
-      border-radius: 12px;
+      padding: 12px 20px;
+      border-radius: 10px;
       cursor: pointer;
       user-select: none;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
       transition: transform 0.1s;
-      min-width: 150px;
+      min-width: 100px;
       text-align: center;
       z-index: 2;
       touch-action: none;
@@ -119,7 +121,7 @@
     
     .node-text {
       font-weight: 600;
-      font-size: 16px;
+      font-size: 15px;
       color: white;
       word-break: break-word;
     }
@@ -137,15 +139,15 @@
     
     .delete-btn {
       position: absolute;
-      top: -10px;
-      right: -10px;
-      width: 32px;
-      height: 32px;
+      top: -8px;
+      right: -8px;
+      width: 26px;
+      height: 26px;
       border-radius: 50%;
       background: #e74c3c;
       color: white;
       border: 2px solid white;
-      font-size: 18px;
+      font-size: 16px;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -171,6 +173,8 @@
       font-size: 14px;
       z-index: 1000;
       animation: fadeIn 0.3s;
+      max-width: 90%;
+      text-align: center;
     }
     
     @keyframes fadeIn {
@@ -179,9 +183,31 @@
     }
     
     @media (max-width: 768px) {
-      h1 { font-size: 20px; }
-      button { width: 100%; }
-      .node { min-width: 120px; padding: 16px 24px; }
+      h1 { font-size: 18px; }
+      button { 
+        padding: 10px 16px;
+        font-size: 14px;
+      }
+      .node { 
+        min-width: 80px; 
+        padding: 10px 16px;
+        font-size: 13px;
+      }
+      .node-text {
+        font-size: 13px;
+      }
+      .delete-btn {
+        width: 24px;
+        height: 24px;
+        font-size: 14px;
+      }
+      #header {
+        padding: 12px;
+        gap: 8px;
+      }
+      #canvas {
+        min-height: 600px;
+      }
     }
   </style>
   <style>@view-transition { navigation: auto; }</style>
@@ -193,7 +219,7 @@
   <div id="app">
    <header id="header">
     <h1>🗺️ Mappa Concettuale</h1>
-    <div style="display: flex; gap: 10px; flex-wrap: wrap;"><button onclick="addNewNode()">+ Aggiungi Concetto</button> <button onclick="exportToHTML()" style="background: #27ae60;">📥 Esporta HTML</button>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;"><button onclick="addNewNode()">+ Aggiungi</button> <button onclick="exportToHTML()" style="background: #27ae60;">📥 Esporta</button>
     </div>
    </header>
    <div id="canvas-container">
@@ -285,14 +311,24 @@
     }
     .node {
       position: absolute;
-      padding: 20px 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      min-width: 150px;
+      padding: 12px 20px;
+      border-radius: 10px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+      min-width: 100px;
       text-align: center;
       font-weight: 600;
-      font-size: 16px;
+      font-size: 15px;
       color: white;
+    }
+    @media (max-width: 768px) {
+      .node {
+        padding: 10px 16px;
+        font-size: 13px;
+        min-width: 80px;
+      }
+      h1 {
+        font-size: 22px;
+      }
     }
   </style>
 </head>
@@ -316,7 +352,7 @@
       a.click();
       URL.revokeObjectURL(url);
       
-      showInfo('��� Mappa esportata in HTML!');
+      showInfo('✓ Mappa esportata in HTML!');
     }
 
     function generateSVG() {
@@ -326,17 +362,17 @@
           const parent = state.nodes.find(n => n.id === node.connectedTo);
           if (!parent) return;
           
-          const x1 = parent.x + 75;
-          const y1 = parent.y + 30;
-          const x2 = node.x + 75;
-          const y2 = node.y + 30;
+          const x1 = parent.x + 50;
+          const y1 = parent.y + 20;
+          const x2 = node.x + 50;
+          const y2 = node.y + 20;
           
           svg += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="rgba(255,255,255,0.7)" stroke-width="3"/>`;
           
           const angle = Math.atan2(node.y - parent.y, node.x - parent.x);
           const arrowSize = 10;
-          const arrowX = node.x + 75 - Math.cos(angle) * 75;
-          const arrowY = node.y + 30 - Math.sin(angle) * 30;
+          const arrowX = node.x + 50 - Math.cos(angle) * 50;
+          const arrowY = node.y + 20 - Math.sin(angle) * 20;
           
           const p1x = arrowX;
           const p1y = arrowY;
@@ -473,7 +509,17 @@
         const node = state.nodes.find(n => n.id === state.draggingNodeId);
         node.x = state.nodeStartX + dx;
         node.y = state.nodeStartY + dy;
-        render();
+        
+        // Aggiorna solo la posizione del nodo durante il drag
+        const nodeEl = document.getElementById(state.draggingNodeId);
+        if (nodeEl) {
+          nodeEl.style.left = node.x + 'px';
+          nodeEl.style.top = node.y + 'px';
+        }
+        
+        // Aggiorna le connessioni ma con debounce
+        if (renderTimeout) clearTimeout(renderTimeout);
+        renderTimeout = setTimeout(() => drawConnections(), 16);
       }
     }
 
@@ -484,13 +530,20 @@
       state.draggingNodeId = null;
       
       if (state.isDragging) {
+        if (renderTimeout) {
+          clearTimeout(renderTimeout);
+          renderTimeout = null;
+        }
         saveToStorage();
         state.isDragging = false;
+        render();
       } else if (wasClick) {
         selectNode(nodeId);
       }
     }
 
+    let renderTimeout = null;
+    
     function drawConnections() {
       const svg = document.getElementById('svg');
       svg.innerHTML = '';
@@ -501,18 +554,18 @@
           if (!parent) return;
           
           const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-          line.setAttribute('x1', parent.x + 75);
-          line.setAttribute('y1', parent.y + 30);
-          line.setAttribute('x2', node.x + 75);
-          line.setAttribute('y2', node.y + 30);
+          line.setAttribute('x1', parent.x + 50);
+          line.setAttribute('y1', parent.y + 20);
+          line.setAttribute('x2', node.x + 50);
+          line.setAttribute('y2', node.y + 20);
           line.setAttribute('stroke', 'rgba(255,255,255,0.7)');
           line.setAttribute('stroke-width', '3');
           svg.appendChild(line);
           
           const angle = Math.atan2(node.y - parent.y, node.x - parent.x);
           const arrowSize = 10;
-          const arrowX = node.x + 75 - Math.cos(angle) * 75;
-          const arrowY = node.y + 30 - Math.sin(angle) * 30;
+          const arrowX = node.x + 50 - Math.cos(angle) * 50;
+          const arrowY = node.y + 20 - Math.sin(angle) * 20;
           
           const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
           const p1 = `${arrowX},${arrowY}`;
@@ -614,5 +667,5 @@
       showInfo('Clicca "Aggiungi Concetto" per iniziare!');
     }
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ba4379a43ac0e73',t:'MTc2Nzc5Njg5OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ba4ff4272ab0e49',t:'MTc2NzgwNTA3Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
