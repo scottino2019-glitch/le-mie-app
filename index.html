@@ -1,26 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>App Studio</title>
-  <style>
-body {
-  font-family: Arial, sans-serif;
-  padding: 20px;
-  background: #f5f5f5;
-}
 
-h1 {
-  color: #333;
-}
-
-p {
-  color: #666;
-}
-  </style>
-</head>
-<body>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -231,32 +209,50 @@ p {
     </div>
   </div>
 </div>
-
 <script>
-  // Salvataggio automatico per Note e Avanzamento
-  const areas = ['note-area', 'progress-area'];
-  areas.forEach(id => {
-    const el = document.getElementById(id);
-    el.value = localStorage.getItem(id) || "";
-    el.addEventListener('input', () => localStorage.setItem(id, el.value));
-  });
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Definiamo le aree di testo
+    const noteArea = document.getElementById('note-area');
+    const progressArea = document.getElementById('progress-area');
 
-  // Gestione Mood
-  const moodBtns = document.querySelectorAll('.mood-btn');
-  let savedMood = localStorage.getItem('userMood');
-  if(savedMood !== null) moodBtns[savedMood].classList.add('active');
+    // 2. Carichiamo i dati salvati
+    const savedNote = localStorage.getItem('note-area');
+    const savedProgress = localStorage.getItem('progress-area');
 
-  function setMood(idx) {
-    moodBtns.forEach(b => b.classList.remove('active'));
-    moodBtns[idx].classList.add('active');
-    localStorage.setItem('userMood', idx);
-  }
-</script>
+    // 3. Applichiamo i dati (con il tuo promemoria originale se è la prima volta)
+    if (savedNote !== null) {
+        noteArea.value = savedNote;
+    } else {
+        noteArea.value = "Ricordati di caricare i nuovi appunti entro venerdì! Il gruppo ti aspetta. ✨";
+    }
 
-</body>
-</html>
-  <script>
-console.log('Ciao da JavaScript!');
+    progressArea.value = savedProgress || "";
+
+    // 4. Salvataggio istantaneo mentre scrivi
+    noteArea.addEventListener('input', () => {
+        localStorage.setItem('note-area', noteArea.value);
+    });
+
+    progressArea.addEventListener('input', () => {
+        localStorage.setItem('progress-area', progressArea.value);
+    });
+
+    // --- GESTIONE MOOD (Invariata ma protetta) ---
+    const moodBtns = document.querySelectorAll('.mood-btn');
+    let savedMood = localStorage.getItem('userMood');
+    
+    if(savedMood !== null && moodBtns[savedMood]) {
+        moodBtns[savedMood].classList.add('active');
+    }
+
+    window.setMood = function(idx) {
+        moodBtns.forEach(b => b.classList.remove('active'));
+        moodBtns[idx].classList.add('active');
+        localStorage.setItem('userMood', idx);
+    }
+});
+
+
   </script>
 </body>
 </html>
