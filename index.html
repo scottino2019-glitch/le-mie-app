@@ -1,133 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Il Mio Sito</title>
+  <style>
+body {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background: #f5f5f5;
+}
 
+h1 {
+  color: #333;
+}
+
+p {
+  color: #666;
+}
+  </style>
+</head>
+<body>
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App Studio</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-<style>/* Stili creativi */
-@keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-20px); }
+<link href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-color: #f4f4f9;
+    --paper-color: #ffffff;
+    --accent-pink: #ffdae9;
+    --accent-blue: #e1f5fe;
+    --accent-yellow: #fff9c4;
+    --text-color: #4a4a4a;
+  }
+
+  body {
+    background-color: var(--bg-color);
+    font-family: 'Indie Flower', cursive; 
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    color: var(--text-color);
+    font-size: 1.3em;
+  }
+
+  .notebook-page {
+    background-color: var(--paper-color);
+    width: 850px;
+    min-height: 1000px;
+    border-radius: 15px;
+    box-shadow: 10px 10px 25px rgba(0,0,0,0.1);
+    position: relative;
+    padding: 50px 50px 50px 110px;
+    background-image: radial-gradient(#d1d1d1 1.2px, transparent 1.2px);
+    background-size: 30px 30px;
+  }
+
+  .notebook-page::before {
+    content: "";
+    position: absolute;
+    left: 35px; top: 0; bottom: 0; width: 40px;
+    background: linear-gradient(to bottom, transparent 15px, #999 15px, #999 35px, transparent 35px);
+    background-size: 100% 50px;
+  }
+
+  header { margin-bottom: 40px; text-align: center; }
+  h1 { font-size: 3em; margin: 0 0 20px 0; color: #333; }
+
+  /* App Icons Bar */
+  .apps-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 30px;
+  }
+
+  .app-icon {
+    display: inline-block;
+    background: white;
+    border: 2px solid #eee;
+    border-radius: 15px;
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+    font-size: 0.65em;
+    min-width: 80px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+  }
+  .app-icon span { font-size: 1.8em; display: block; margin-bottom: 5px; }
+
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+
+  /* Sezioni Testuali Interattive */
+  .edit-box {
+    width: 100%;
+    background: transparent;
+    border: none;
+    font-family: inherit;
+    font-size: 0.9em;
+    resize: none;
+    outline: none;
+    color: #333;
+    line-height: 1.4;
+  }
+
+  .sticky-note {
+    background-color: var(--accent-yellow);
+    padding: 25px;
+    border-radius: 35px;
+    border: 1px solid #f0e68c;
+    margin-top: 20px;
+    transform: rotate(1deg);
+  }
+
+  .highlight-box {
+    background-color: var(--accent-blue);
+    padding: 25px;
+    border-radius: 20px;
+    transform: rotate(-1deg);
+    min-height: 180px;
+  }
+
+  /* Mood */
+  .mood-selector { display: flex; gap: 15px; margin-top: 15px; }
+  .mood-btn { cursor: pointer; font-size: 1.5em; opacity: 0.3; transition: 0.3s; }
+  .mood-btn.active { opacity: 1; transform: scale(1.2); }
+
+  h2 { border-bottom: 3px solid var(--accent-pink); display: inline-block; margin-bottom: 15px; }
+/* --- ADATTAMENTO PER CELLULARE --- */
+  /* --- FIX PER MOBILE: NIENTE PIÙ STRISCIA --- */
+
+@media (max-width: 768px) {
+  body {
+    padding: 5px; /* Riduce lo spazio fuori dal foglio */
+  }
+
+  .notebook-page {
+    width: 100%; /* Occupa tutto lo spazio disponibile */
+    padding: 30px 15px 30px 50px; /* Riduce i margini interni (soprattutto a sinistra) */
+    box-sizing: border-box; /* Impedisce al foglio di "uscire" dallo schermo */
+    min-height: auto; /* Si allunga in base a quanto scrivi */
+  }
+
+  .notebook-page::before {
+    left: 10px; /* Sposta la spirale più a sinistra per dare spazio al testo */
+    width: 25px;
+  }
+
+  .content-grid {
+    grid-template-columns: 1fr !important; /* Forza una colonna sola */
+    gap: 30px;
+  }
+
+  h1 {
+    font-size: 1.8em; /* Titolo più proporzionato */
+    text-align: center;
+  }
+
+  /* Se hai le icone in alto, farle andare a capo bene */
+  .apps-grid, header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
 }
+</style>
+</head>
+<body>
 
-.floating {
-    animation: float 3s ease-in-out infinite;
-}
+<div class="notebook-page">
+  <header>
+    <h1>Study Home</h1>
+    <div class="apps-grid">
+        <a href="quiz-cinese_app.html" class="app-icon"><span>📝</span>Esercizi</a>
+        <a href="hub_lezione.html" class="app-icon"><span>🎥</span>Lezioni</a>
+        <a href="vocabolario-creator.html" class="app-icon"><span>📖</span>Vocabolario</a>
+        <a href="lingueEditor.html" class="app-icon"><span>✍️</span>Editor</a>
+        <a href="builder.html" class="app-icon"><span>🛠️</span>Builder</a>
+        <a href="libro.html" class="app-icon"><span>📚</span>Gramm.</a>
+        <a href="mappe.html" class="app-icon"><span>🗺️</span>Mappe</a>
+        <a href="libro-esercizi.html" class="app-icon"><span>🎓</span>Libro Es.</a>
+        <a href="libro-cultura.html" class="app-icon"><span>🌍</span>Cultura</a>
+        <a href="libro-lingue.html" class="app-icon"><span>📓</span>Libro Lez.</a>
+    </div>
+  </header>
 
-.creative-card {
-    backdrop-filter: blur(10px);
-    background: rgba(255, 255, 255, 0.1);
-}</style></head>
-<body class="bg-black text-white overflow-x-hidden">
-    <div class="min-h-screen flex items-center justify-center relative">
-        <div class="absolute inset-0 bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 opacity-50"></div>
-        
-        <div class="relative z-10 text-center">
-            <h1 class="text-8xl font-bold mb-8 bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">
-                Le mie app
-            </h1>
-            <p class="text-2xl mb-12 text-gray-300">Generatore di esercizi, grammatica, vocabolario</p>
-            
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
-                <div class="group cursor-pointer">
-                    <div class="w-32 h-32 bg-gradient-to-br from-pink-500 to-red-500 rounded-full mx-auto mb-4 group-hover:scale-110 transition-transform flex items-center justify-center">
-                     <a href="quiz-cinese_app.html" ><span class="text-4xl">📝</span></a>
-                    </div>
-                    <p class="text-sm">Esercizi</p>
-                </div>
-                
-                <div class="group cursor-pointer">
-                    <div class="w-32 h-32 bg-gradient-to-br from-blue-500 to-pink-500 rounded-full mx-auto mb-4 group-hover:scale-110 transition-transform flex items-center justify-center">
-                      <a href="hub_lezione.html">  <span class="text-4xl">📖</span> </a>
-                    </div>
-                    <p class="text-sm">lezioni</p>
-                </div>
-                
-                <div class="group cursor-pointer">
-                    <div class="w-32 h-32 bg-gradient-to-br from-green-500 to-yellow-500 rounded-full mx-auto mb-4 group-hover:scale-110 transition-transform flex items-center justify-center">
-                    <a href="vocabolario-creator.html">    <span class="text-4xl">📗</span> </a>
-                    </div>
-                    <p class="text-sm">vocabolario</p>
-                </div>
+  <div class="content-grid">
+    <div class="left-col">
+      <div class="section">
+        <h2>Libreria PDF 📄</h2>
+        <div style="font-size: 0.9em; line-height: 1.8;">
+          <div>📄 Atena_Grammatica.pdf</div>
+          <div>📄 chinese.pdf</div>
+          </div>
+        <button style="margin-top:15px; padding: 10px 20px; border-radius: 12px; border: 1px solid #ccc; cursor: pointer; font-family: inherit; background: orange;">
+            📎 Apri Lettore PDF
+        </button>
+      </div>
+<hr>
+      <div class="sticky-note">
+        <h3 style="margin:0 0 10px 0; color:#d81b60;">Bacheca Note 📌</h3>
+        <textarea id="note-area" class="edit-box" style="height: 120px;" placeholder="Scrivi qui i promemoria..."></textarea>
+      </div>
+    </div>
 
-                <div class="group cursor-pointer">
-                    <div class="w-32 h-32 bg-gradient-to-br from-red-500 to-yellow-500 rounded-full mx-auto mb-4 group-hover:scale-110 transition-transform flex items-center justify-center">
-                    <a href="lingueEditor.html">    <span class="text-4xl">📝</span> </a>
-                    </div>
-                    <p class="text-sm">Editor</p>
-                </div>
-                
-                <div class="group cursor-pointer">
-                    <div class="w-32 h-32 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full mx-auto mb-4 group-hover:scale-110 transition-transform flex items-center justify-center">
-                    <a href="builder.html">    <span class="text-4xl">🪄</span> </a>
-                    </div>
-                    <p class="text-sm">builder</p>
-                </div>
-                                <div class="group cursor-pointer">
-                    <div class="w-32 h-32 bg-gradient-to-br from-blue-500 to-green-500 rounded-full mx-auto mb-4 group-hover:scale-110 transition-transform flex items-center justify-center">
-                      <a href="lettore-pdf.html">  <span class="text-4xl">📚</span></a>
-                    </div>
-                    <p class="text-sm">lettore-pdf</p>
-                </div>
-                <div class="group cursor-pointer">
-                    <div class="w-32 h-32 bg-gradient-to-br from-purple-500 to-white-500 rounded-full mx-auto mb-4 group-hover:scale-110 transition-transform flex items-center justify-center">
-                    <a href="libro.html">    <span class="text-4xl">📘</span> </a>
-                    </div>
-                    <p class="text-sm">Libro-grammatica</p>
-                </div>
+    <div class="right-col">
+      <div class="highlight-box">
+        <h3 style="margin:0 0 10px 0;">Avanzamento Studio 📝</h3>
+        <textarea id="progress-area" class="edit-box" style="height: 140px;" placeholder="Cosa hai studiato oggi? Cosa devi fare domani?"></textarea>
+      </div>
 
-       <div class="group cursor-pointer">
-                    <div class="w-32 h-32 bg-gradient-to-br from-red-500 to-green-500 rounded-full mx-auto mb-4 group-hover:scale-110 transition-transform flex items-center justify-center">
-                    <a href="mappe.html">    <span class="text-4xl">⛓️‍💥</span> </a>
-                    </div>
-                    <p class="text-sm">Mappe concettuali</p>
-                </div>
-<div class="group cursor-pointer">
-                    <div class="w-32 h-32 bg-gradient-to-br from-yellow-500 to-purple-500 rounded-full mx-auto mb-4 group-hover:scale-110 transition-transform flex items-center justify-center">
-                    <a href="libro-esercizi.html">    <span class="text-4xl">📘</span> </a>
-                    </div>
-                    <p class="text-sm">Libro-esercizi</p>
-
-                </div>
-<div class="group cursor-pointer">
-                    <div class="w-32 h-32 bg-gradient-to-br from-purple-500 to-red-500 rounded-full mx-auto mb-4 group-hover:scale-110 transition-transform flex items-center justify-center">
-                    <a href="libro-cultura.html">    <span class="text-4xl">📘</span> </a>
-                    </div>
-                    <p class="text-sm">Libro-cultura</p>
-                </div>
-
-                    <div class="group cursor-pointer">
-                    <div class="w-32 h-32 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full mx-auto mb-4 group-hover:scale-110 transition-transform flex items-center justify-center">
-                    <a href="libro-lingue.html">    <span class="text-4xl">📗</span> </a>
-                    </div>
-                    <p class="text-sm">libro-lezione</p>
-                </div>        </div>
+      <div class="section" style="margin-top: 40px;">
+        <h2>Mood del Giorno 🧡</h2>
+        <div class="mood-selector">
+          <span class="mood-btn" onclick="setMood(0)">🧡</span>
+          <span class="mood-btn" onclick="setMood(1)">🙂</span>
+          <span class="mood-btn" onclick="setMood(2)">😐</span>
+          <span class="mood-btn" onclick="setMood(3)">😴</span>
+          <span class="mood-btn" onclick="setMood(4)">🫤</span>
         </div>
-        
-        
-<script>// Animazioni creative
-document.addEventListener('DOMContentLoaded', function() {
-    // Parallax effect
-    window.addEventListener('scroll', function() {
-        const scrolled = window.pageYOffset;
-        const parallax = document.querySelector('.absolute.inset-0');
-        if (parallax) {
-            parallax.style.transform = `translateY(${scrolled * 0.5}px)`;
-        }
-    });
-    
-    // Hover effects
-    const circles = document.querySelectorAll('.group');
-    circles.forEach(circle => {
-        circle.addEventListener('mouseenter', function() {
-            this.style.transform = 'scale(1.1)';
-        });
-        
-        circle.addEventListener('mouseleave', function() {
-            this.style.transform = 'scale(1)';
-        });
-    });
-});</script></body>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Salvataggio automatico per Note e Avanzamento
+  const areas = ['note-area', 'progress-area'];
+  areas.forEach(id => {
+    const el = document.getElementById(id);
+    el.value = localStorage.getItem(id) || "";
+    el.addEventListener('input', () => localStorage.setItem(id, el.value));
+  });
+
+  // Gestione Mood
+  const moodBtns = document.querySelectorAll('.mood-btn');
+  let savedMood = localStorage.getItem('userMood');
+  if(savedMood !== null) moodBtns[savedMood].classList.add('active');
+
+  function setMood(idx) {
+    moodBtns.forEach(b => b.classList.remove('active'));
+    moodBtns[idx].classList.add('active');
+    localStorage.setItem('userMood', idx);
+  }
+</script>
+
+</body>
 </html>
+  <script>
+console.log('Ciao da JavaScript!');
+  </script>
+</body>
+</html>
+
+    
+  
