@@ -1,815 +1,336 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="it" class="h-full">
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Editor Libro</title>
-  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <title>Editor Libro Esercizi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg-color: #f8fafc;
+      --paper-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+      --primary: #0f172a;
+      --accent: #3b82f6;
+    }
+
     body {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
       font-family: 'Inter', sans-serif;
-      background: #fafaf9;
-      height: 100%;
+      background: var(--bg-color);
+      color: #1e293b;
     }
     
+    /* TOOLBAR MODERNA */
     .toolbar {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
-      background: white;
-      border-bottom: 1px solid #e7e5e4;
-      padding: 12px 20px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid #e2e8f0;
+      padding: 12px 32px;
       display: flex;
-      gap: 8px;
+      gap: 16px;
       align-items: center;
-      z-index: 100;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      z-index: 1000;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
     
     .toolbar button {
-      padding: 8px 16px;
+      padding: 10px 24px;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       font-family: 'Inter', sans-serif;
       font-size: 14px;
-      font-weight: 500;
+      font-weight: 600;
       cursor: pointer;
       transition: all 0.2s;
     }
     
-    .toolbar button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
+    .btn-chapter { background: var(--primary); color: white; }
+    .btn-chapter:hover { background: #1e293b; transform: translateY(-1px); }
     
-    .btn-chapter {
-      background: #0c4a6e;
-      color: white;
-    }
+    .btn-export { background: #10b981; color: white; margin-left: auto; }
+    .btn-export:hover { background: #059669; transform: translateY(-1px); }
     
-    .btn-export {
-      background: #059669;
-      color: white;
-      margin-left: auto;
-    }
-    
+    /* CONTAINER FOGLI */
     .book-container {
-      max-width: 850px;
+      max-width: 950px;
       margin: 0 auto;
-      padding: 80px 40px 60px;
+      padding: 80px 20px 80px;
     }
     
     .book-page {
       background: white;
-      padding: 60px 80px;
-      margin-bottom: 20px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      min-height: 400px;
+      padding: 80px 100px;
+      margin-bottom: 40px;
+      box-shadow: var(--paper-shadow);
+      min-height: 297mm;
       position: relative;
+      border-radius: 4px;
     }
     
+    /* CAMPI EDITABILI */
     .editable {
       outline: none;
-      padding: 4px 8px;
-      margin: -4px -8px;
       border-radius: 4px;
-      transition: background 0.15s;
+      transition: all 0.2s;
     }
-    
-    .editable:hover {
-      background: #fef3c7;
-    }
-    
     .editable:focus {
-      background: #fde68a;
-      box-shadow: 0 0 0 2px #fbbf24;
+      background: #f1f5f9;
+    }
+
+    /* ESERCIZI CLICCABILI (Input) */
+    .esercizio-input {
+        border: none;
+        border-bottom: 2px solid #cbd5e1;
+        font-family: 'Inter', sans-serif;
+        font-size: inherit;
+        color: var(--accent);
+        width: 200px;
+        padding: 0 5px;
+        outline: none;
+        background: transparent;
+        transition: border-color 0.2s;
+    }
+    .esercizio-input:focus {
+        border-bottom-color: var(--accent);
     }
     
+    /* TIPOGRAFIA */
     .cover-title {
       font-family: 'Merriweather', serif;
-      font-size: 48px;
+      font-size: 30px;
       font-weight: 700;
-      color: #0c4a6e;
-      margin-bottom: 16px;
-      line-height: 1.2;
-    }
-    
-    .cover-subtitle {
-      font-family: 'Inter', sans-serif;
-      font-size: 20px;
-      color: #64748b;
-      margin-bottom: 60px;
-    }
-    
-    .cover-author {
-      font-family: 'Inter', sans-serif;
-      font-size: 16px;
-      color: #94a3b8;
-      font-weight: 500;
+      color: var(--primary);
+      margin-bottom: 24px;
+      line-height: 1;
     }
     
     .toc-title {
       font-family: 'Merriweather', serif;
-      font-size: 32px;
+      font-size: 30px;
       font-weight: 700;
-      color: #0c4a6e;
-      margin-bottom: 32px;
-      padding-bottom: 16px;
-      border-bottom: 2px solid #e7e5e4;
-    }
-    
-    .toc-item {
-      margin: 12px 0;
-      font-size: 16px;
-    }
-    
-    .toc-link {
-      color: #0369a1;
-      text-decoration: none;
-      font-weight: 500;
-    }
-    
-    .toc-link:hover {
-      text-decoration: underline;
-    }
-    
-    .chapter-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
       margin-bottom: 40px;
-      padding-bottom: 20px;
-      border-bottom: 2px solid #e7e5e4;
+      color: var(--primary);
+      border-bottom: 3px solid var(--accent);
+      display: inline-block;
+      padding-bottom: 8px;
     }
+    
+    .toc-row {
+      display: flex;
+      align-items: baseline;
+      margin: 14px 0;
+    }
+    .toc-dots { flex-grow: 1; border-bottom: 1px dotted #cbd5e1; margin: 0 10px; }
     
     .chapter-number {
-      font-family: 'Inter', sans-serif;
       font-size: 14px;
-      color: #0369a1;
-      font-weight: 600;
+      color: var(--accent);
+      font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 8px;
+      letter-spacing: 3px;
     }
     
     .chapter-title {
       font-family: 'Merriweather', serif;
-      font-size: 36px;
+      font-size: 20px;
       font-weight: 700;
-      color: #0c4a6e;
-      line-height: 1.3;
-    }
-    
-    .section-title {
-      font-family: 'Merriweather', serif;
-      font-size: 24px;
-      font-weight: 700;
-      color: #0c4a6e;
-      margin-top: 40px;
-      margin-bottom: 16px;
+      color: var(--primary);
+      margin-top: 8px;
     }
     
     .chapter-content {
-      font-family: 'Inter', sans-serif;
-      font-size: 16px;
+      font-size: 18px;
       line-height: 1.8;
       color: #334155;
     }
     
-    .chapter-content p {
-      margin: 16px 0;
-    }
-    
     .action-buttons {
+      position: absolute;
+      right: 40px;
+      top: 40px;
       display: flex;
       gap: 8px;
     }
     
     .btn-small {
       padding: 6px 12px;
-      border: none;
-      border-radius: 4px;
-      font-family: 'Inter', sans-serif;
-      font-size: 13px;
-      font-weight: 500;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s;
+      border: 1px solid #e2e8f0;
+      background: white;
     }
-    
-    .btn-add {
-      background: #e0f2fe;
-      color: #0369a1;
-    }
-    
-    .btn-delete {
-      background: #fee2e2;
-      color: #dc2626;
-    }
-    
-    .btn-small:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    
-    .empty-state {
-      text-align: center;
-      padding: 80px 40px;
-      color: #94a3b8;
-    }
-    
-    .empty-state-icon {
-      font-size: 48px;
-      margin-bottom: 16px;
-    }
-    
+    .btn-delete:hover { background: #fff1f2; color: #e11d48; border-color: #fecdd3; }
+
     @media print {
       .toolbar, .action-buttons { display: none !important; }
-      .book-page { box-shadow: none; page-break-after: always; }
+      body { background: white; }
+      .book-page { box-shadow: none; margin: 0; width: 100%; page-break-after: always; }
     }
   </style>
-  <style>@view-transition { navigation: auto; }</style>
-  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
-  <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
-  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
  </head>
- <body class="h-full"><!-- Toolbar -->
-  <div class="toolbar"><button class="btn-chapter" onclick="addChapter()">+ Capitolo</button> <button class="btn-export" onclick="exportHTML()">📥 Esporta HTML</button>
-  </div><!-- Book Container -->
-  <div class="book-container"><!-- Cover Page -->
-   <div class="book-page" style="text-align: center; display: flex; flex-direction: column; justify-content: center;">
-    <div style="margin-bottom: 60px; font-size: 64px;">
-     📚
-    </div>
-    <h1 class="cover-title editable" contenteditable="true" data-key="title">Il Mio Libro di Esercizi</h1>
-    <p class="cover-subtitle editable" contenteditable="true" data-key="subtitle">Guida Completa per lo Studio</p>
-    <p class="cover-author editable" contenteditable="true" data-key="author">Autore</p>
-   </div><!-- Table of Contents -->
-   <div class="book-page" id="toc-page">
-    <h2 class="toc-title">Indice</h2>
-    <div id="toc-content">
-     <p class="empty-state">Aggiungi capitoli per generare l'indice automaticamente</p>
-    </div>
-   </div><!-- Chapters Container -->
-   <div id="chapters-container"></div><!-- Empty State -->
-   <div id="empty-state" class="book-page empty-state">
-    <div class="empty-state-icon">
-     📝
-    </div>
-    <h3 style="font-family: 'Merriweather', serif; font-size: 24px; color: #64748b; margin-bottom: 12px;">Inizia a Scrivere</h3>
-    <p style="margin-bottom: 24px;">Clicca su "+ Capitolo" per iniziare il tuo libro</p><button class="btn-chapter" onclick="addChapter()">+ Aggiungi Primo Capitolo</button>
-   </div>
+ <body>
+  <div class="toolbar">
+      <button class="btn-chapter" onclick="addChapter()">+ Aggiungi Capitolo</button> 
+      <button class="btn-export" onclick="exportHTML()">📥 Scarica Libro Interattivo</button>
   </div>
+
+  <div class="book-container">
+   <!-- Copertina -->
+   <div class="book-page flex flex-col justify-center items-center text-center">
+    <div class="w-20 h-1 bg-blue-500 mb-12"></div>
+    <h1 class="cover-title editable" contenteditable="true" data-key="title">Il Mio Libro di Esercizi</h1>
+    <p class="text-2xl text-slate-500 mb-12 editable" contenteditable="true" data-key="subtitle">Quaderno di lavoro e pratica</p>
+    <p class="font-bold tracking-widest uppercase editable" contenteditable="true" data-key="author">Nome Autore</p>
+   </div>
+
+   <!-- Indice -->
+   <div class="book-page" id="toc-page">
+    <h2 class="toc-title">Indice dei Contenuti</h2>
+    <div id="toc-content"></div>
+   </div>
+
+   <!-- Capitoli -->
+   <div id="chapters-container"></div>
+  </div>
+
   <script>
-    // Book data structure
     let bookData = {
       title: 'Il Mio Libro di Esercizi',
-      subtitle: 'Guida Completa per lo Studio',
-      author: 'Autore',
+      subtitle: 'Quaderno di lavoro e pratica',
+      author: 'Nome Autore',
       chapters: [
         {
-          id: 'example_ch1',
-          title: 'Cinese (中文) - Livello Base HSK 1',
+          id: 'ch_1',
+          title: 'Introduzione alla Lingua',
           sections: [
             {
-              id: 'example_s1',
-              title: 'Saluti e Presentazioni',
-              content: `
-<p><strong>Esercizio 1: Traduci dall'italiano al cinese</strong></p>
-<p>1. Ciao → _______________</p>
-<p>2. Come ti chiami? → _______________</p>
-<p>3. Mi chiamo Marco → _______________</p>
-<p>4. Grazie → _______________</p>
-<p>5. Prego / Di niente → _______________</p>
-
-<p style="margin-top: 32px;"><strong>Esercizio 2: Scrivi il Pinyin corretto</strong></p>
-<p>你好 → _______________ (ciao)</p>
-<p>谢谢 → _______________ (grazie)</p>
-<p>再见 → _______________ (arrivederci)</p>
-<p>老师 → _______________ (insegnante)</p>
-<p>学生 → _______________ (studente)</p>
-
-<p style="margin-top: 32px;"><strong>Esercizio 3: Completa il dialogo</strong></p>
-<p>A: 你好！</p>
-<p>B: _______________！</p>
-<p>A: 你叫什么名字？</p>
-<p>B: 我叫_______________。你呢？</p>
-<p>A: 我叫李明。</p>
-
-<p style="margin-top: 32px;"><em>💡 Suggerimento: Ricorda i 4 toni del cinese mandarino!</em></p>
-<p>• 1° tono (ˉ) piatto alto: mā 妈 (mamma)</p>
-<p>• 2° tono (ˊ) ascendente: má 麻 (canapa)</p>
-<p>• 3° tono (ˇ) discendente-ascendente: mǎ 马 (cavallo)</p>
-<p>• 4° tono (ˋ) discendente: mà 骂 (insultare)</p>
-              `
-            },
-            {
-              id: 'example_s2',
-              title: 'Numeri e Date',
-              content: `
-<p><strong>Esercizio 4: Scrivi i numeri in caratteri cinesi</strong></p>
-<p>1 → _______________</p>
-<p>5 → _______________</p>
-<p>10 → _______________</p>
-<p>25 → _______________</p>
-<p>100 → _______________</p>
-
-<p style="margin-top: 32px;"><strong>Esercizio 5: Traduci le date</strong></p>
-<p>今天 → _______________ (oggi)</p>
-<p>明天 → _______________ (domani)</p>
-<p>昨天 → _______________ (ieri)</p>
-<p>星期一 → _______________ (lunedì)</p>
-<p>星期天 → _______________ (domenica)</p>
-
-<p style="margin-top: 32px;"><strong>Esercizio 6: Riconosci i radicali</strong></p>
-<p>人 (persona) appare in: 你、他、们</p>
-<p>口 (bocca) appare in: 吃、喝、_______________ (trova altri esempi)</p>
-<p>日 (sole/giorno) appare in: 明、时、_______________ (trova altri esempi)</p>
-              `
-            }
-          ]
-        },
-        {
-          id: 'example_ch2',
-          title: 'Giapponese (日本語) - Livello N5',
-          sections: [
-            {
-              id: 'example_s3',
-              title: 'Hiragana e Katakana',
-              content: `
-<p><strong>Esercizio 1: Converti in Hiragana</strong></p>
-<p>konnichiwa → _______________</p>
-<p>arigatou → _______________</p>
-<p>sayounara → _______________</p>
-<p>watashi → _______________</p>
-<p>anata → _______________</p>
-
-<p style="margin-top: 32px;"><strong>Esercizio 2: Converti in Katakana (parole straniere)</strong></p>
-<p>ko-hi- (caffè) → _______________</p>
-<p>resutoran (ristorante) → _______________</p>
-<p>takushi- (taxi) → _______________</p>
-<p>itaria (Italia) → _______________</p>
-
-<p style="margin-top: 32px;"><strong>Esercizio 3: Completa con le particelle corrette (は、が、を、に、で)</strong></p>
-<p>私___学生です。(Io sono studente)</p>
-<p>本___読みます。(Leggo un libro)</p>
-<p>学校___行きます。(Vado a scuola)</p>
-<p>東京___住んでいます。(Abito a Tokyo)</p>
-<p>カフェ___コーヒーを飲みます。(Bevo caffè al bar)</p>
-
-<p style="margin-top: 32px;"><em>💡 Ricorda:</em></p>
-<p>• は (wa) - particella di topic</p>
-<p>• が (ga) - particella di soggetto</p>
-<p>• を (wo/o) - particella di oggetto diretto</p>
-<p>• に (ni) - direzione, tempo, luogo di esistenza</p>
-<p>• で (de) - luogo di azione, mezzo</p>
-              `
-            },
-            {
-              id: 'example_s4',
-              title: 'Kanji Base e Verbi',
-              content: `
-<p><strong>Esercizio 4: Scrivi il significato e le letture ON/KUN</strong></p>
-<p>人 → Significato: _______________ | KUN: _______________ | ON: _______________</p>
-<p>日 → Significato: _______________ | KUN: _______________ | ON: _______________</p>
-<p>山 → Significato: _______________ | KUN: _______________ | ON: _______________</p>
-<p>川 → Significato: _______________ | KUN: _______________ | ON: _______________</p>
-
-<p style="margin-top: 32px;"><strong>Esercizio 5: Coniuga i verbi al presente cortese (ます形)</strong></p>
-<p>食べる (mangiare) → _______________</p>
-<p>飲む (bere) → _______________</p>
-<p>行く (andare) → _______________</p>
-<p>見る (vedere) → _______________</p>
-<p>する (fare) → _______________</p>
-
-<p style="margin-top: 32px;"><strong>Esercizio 6: Forma negativa (ません)</strong></p>
-<p>食べます → _______________</p>
-<p>飲みます → _______________</p>
-<p>行きます → _______________</p>
-              `
-            }
-          ]
-        },
-        {
-          id: 'example_ch3',
-          title: 'Coreano (한국어) - Livello Base',
-          sections: [
-            {
-              id: 'example_s5',
-              title: 'Alfabeto Hangul (한글)',
-              content: `
-<p><strong>Esercizio 1: Scrivi in Hangul</strong></p>
-<p>annyeonghaseyo (ciao formale) → _______________</p>
-<p>kamsahamnida (grazie) → _______________</p>
-<p>ne (sì) → _______________</p>
-<p>anio (no) → _______________</p>
-<p>saranghae (ti amo) → _______________</p>
-
-<p style="margin-top: 32px;"><strong>Esercizio 2: Leggi e trascrivi in alfabeto latino</strong></p>
-<p>한국 → _______________ (Corea)</p>
-<p>서울 → _______________ (Seoul)</p>
-<p>친구 → _______________ (amico)</p>
-<p>학교 → _______________ (scuola)</p>
-<p>선생님 → _______________ (insegnante)</p>
-
-<p style="margin-top: 32px;"><strong>Esercizio 3: Componi le sillabe Hangul</strong></p>
-<p>ㄱ + ㅏ = _______________</p>
-<p>ㄴ + ㅏ = _______________</p>
-<p>ㅎ + ㅏ + ㄴ = _______________</p>
-<p>ㄱ + ㅜ + ㄱ = _______________</p>
-
-<p style="margin-top: 32px;"><em>💡 Struttura sillaba Hangul:</em></p>
-<p>• Consonante iniziale + Vocale = 가, 나, 다</p>
-<p>• Consonante iniziale + Vocale + Consonante finale = 강, 산, 한</p>
-              `
-            },
-            {
-              id: 'example_s6',
-              title: 'Livelli di Formalità e Verbi',
-              content: `
-<p><strong>Esercizio 4: Trasforma da informale (반말) a formale (존댓말)</strong></p>
-<p>먹어 (mangia) → _______________ (mangi - formale)</p>
-<p>가 (vai) → _______________ (va - formale)</p>
-<p>있어 (c'è) → _______________ (c'è - formale)</p>
-
-<p style="margin-top: 32px;"><strong>Esercizio 5: Coniuga al presente formale (해요/어요)</strong></p>
-<p>먹다 (mangiare) → _______________</p>
-<p>자다 (dormire) → _______________</p>
-<p>하다 (fare) → _______________</p>
-<p>보다 (vedere) → _______________</p>
-
-<p style="margin-top: 32px;"><strong>Esercizio 6: Usa i contatori corretti</strong></p>
-<p>사람 한 _______________ (una persona)</p>
-<p>개 두 _______________ (due cani)</p>
-<p>사과 세 _______________ (tre mele)</p>
-<p>책 네 _______________ (quattro libri)</p>
-
-<p style="margin-top: 32px;"><em>💡 Contatori comuni:</em></p>
-<p>• 명/분 - persone (분 è più formale)</p>
-<p>• 마리 - animali</p>
-<p>• 개 - oggetti generici</p>
-<p>• 권 - libri</p>
-              `
+              id: 'sec_1',
+              title: 'Primi Passi',
+              content: `<p>Completa le seguenti frasi con le parole corrette:</p>
+                        <p>1. Buongiorno in cinese si dice: <input type="text" class="esercizio-input" placeholder="Scrivi qui..."></p>
+                        <p>2. Per ringraziare usiamo: <input type="text" class="esercizio-input" placeholder="Scrivi qui..."></p>`
             }
           ]
         }
       ]
     };
 
-    // Load from localStorage
     function loadBook() {
-      const saved = localStorage.getItem('myBook');
-      if (saved) {
-        try {
-          bookData = JSON.parse(saved);
-          renderBook();
-        } catch (e) {
-          console.error('Error loading book:', e);
-        }
-      }
+      const saved = localStorage.getItem('proBookData');
+      if (saved) bookData = JSON.parse(saved);
+      renderBook();
     }
 
-    // Save to localStorage
     function saveBook() {
-      localStorage.setItem('myBook', JSON.stringify(bookData));
+      localStorage.setItem('proBookData', JSON.stringify(bookData));
       updateTOC();
     }
 
-    // Generate unique ID
-    function generateId() {
-      return Date.now().toString(36) + Math.random().toString(36).substr(2);
-    }
-
-    // Add chapter
     function addChapter() {
-      const chapterNum = bookData.chapters.length + 1;
-      const newChapter = {
-        id: generateId(),
-        title: `Capitolo ${chapterNum}`,
-        sections: [
-          {
-            id: generateId(),
-            title: 'Introduzione',
-            content: '<p>Inizia a scrivere qui il contenuto...</p>'
-          }
-        ]
-      };
-      
-      bookData.chapters.push(newChapter);
-      saveBook();
-      renderBook();
-      
-      // Scroll to new chapter
-      setTimeout(() => {
-        document.getElementById(`chapter-${newChapter.id}`).scrollIntoView({ behavior: 'smooth' });
-      }, 100);
-    }
-
-    // Add section to chapter
-    function addSection(chapterId) {
-      const chapter = bookData.chapters.find(c => c.id === chapterId);
-      if (!chapter) return;
-      
-      const sectionNum = chapter.sections.length + 1;
-      const newSection = {
-        id: generateId(),
-        title: `Sezione ${sectionNum}`,
-        content: '<p>Scrivi qui il contenuto della sezione...</p>'
-      };
-      
-      chapter.sections.push(newSection);
+      const id = 'ch_' + Date.now();
+      bookData.chapters.push({
+        id: id,
+        title: 'Nuovo Capitolo',
+        sections: [{ id: 'sec_' + Date.now(), title: 'Nuova Sezione', content: '<p>Scrivi il testo e aggiungi campi esercizio come questo: <input type="text" class="esercizio-input"></p>' }]
+      });
       saveBook();
       renderBook();
     }
 
-    // Delete chapter
-    function deleteChapter(chapterId) {
-      if (confirm('Eliminare questo capitolo e tutte le sue sezioni?')) {
-        bookData.chapters = bookData.chapters.filter(c => c.id !== chapterId);
+    function deleteChapter(id) {
+      if(confirm("Eliminare il capitolo?")) {
+        bookData.chapters = bookData.chapters.filter(c => c.id !== id);
         saveBook();
         renderBook();
       }
     }
 
-    // Delete section
-    function deleteSection(chapterId, sectionId) {
-      const chapter = bookData.chapters.find(c => c.id === chapterId);
-      if (!chapter) return;
-      
-      if (chapter.sections.length <= 1) {
-        alert('Non puoi eliminare l\'ultima sezione. Elimina l\'intero capitolo se necessario.');
-        return;
-      }
-      
-      if (confirm('Eliminare questa sezione?')) {
-        chapter.sections = chapter.sections.filter(s => s.id !== sectionId);
-        saveBook();
-        renderBook();
-      }
-    }
+    function updateContent(el) {
+      const key = el.dataset.key;
+      const chId = el.dataset.chapter;
+      const secId = el.dataset.section;
+      const field = el.dataset.field;
 
-    // Update content
-    function updateContent(element) {
-      const key = element.dataset.key;
-      const chapterId = element.dataset.chapter;
-      const sectionId = element.dataset.section;
-      const field = element.dataset.field;
-      
-      if (key) {
-        // Cover page fields
-        bookData[key] = element.textContent.trim();
-      } else if (chapterId && sectionId) {
-        // Section content
-        const chapter = bookData.chapters.find(c => c.id === chapterId);
-        if (chapter) {
-          const section = chapter.sections.find(s => s.id === sectionId);
-          if (section) {
-            if (field === 'title') {
-              section.title = element.textContent.trim();
-            } else {
-              section.content = element.innerHTML;
-            }
-          }
-        }
-      } else if (chapterId && field) {
-        // Chapter title
-        const chapter = bookData.chapters.find(c => c.id === chapterId);
-        if (chapter) {
-          chapter.title = element.textContent.trim();
-        }
+      if(key) bookData[key] = el.innerText;
+      else if(chId && !secId) {
+          const ch = bookData.chapters.find(c => c.id === chId);
+          if(ch) ch.title = el.innerText;
+      } else if(chId && secId) {
+          const ch = bookData.chapters.find(c => c.id === chId);
+          const sec = ch.sections.find(s => s.id === secId);
+          if(field === 'title') sec.title = el.innerText;
+          else sec.content = el.innerHTML;
       }
-      
       saveBook();
     }
 
-    // Render the entire book
     function renderBook() {
       const container = document.getElementById('chapters-container');
-      const emptyState = document.getElementById('empty-state');
-      
-      if (bookData.chapters.length === 0) {
-        container.innerHTML = '';
-        emptyState.style.display = 'block';
-        return;
-      }
-      
-      emptyState.style.display = 'none';
-      
-      container.innerHTML = bookData.chapters.map((chapter, chIdx) => `
-        <div class="book-page" id="chapter-${chapter.id}">
-          <div class="chapter-header">
-            <div style="flex: 1;">
-              <div class="chapter-number">Capitolo ${chIdx + 1}</div>
-              <h2 class="chapter-title editable" 
-                  contenteditable="true" 
-                  data-chapter="${chapter.id}" 
-                  data-field="title"
-                  onblur="updateContent(this)">${chapter.title}</h2>
-            </div>
-            <div class="action-buttons">
-              <button class="btn-small btn-add" onclick="addSection('${chapter.id}')">+ Sezione</button>
-              <button class="btn-small btn-delete" onclick="deleteChapter('${chapter.id}')">🗑️</button>
-            </div>
+      container.innerHTML = bookData.chapters.map((ch, i) => `
+        <div class="book-page" id="${ch.id}">
+          <div class="action-buttons no-print">
+            <button class="btn-small btn-delete" onclick="deleteChapter('${ch.id}')">Elimina Capitolo</button>
           </div>
+          <div class="chapter-number">Capitolo ${i+1}</div>
+          <h2 class="chapter-title editable" contenteditable="true" data-chapter="${ch.id}" onblur="updateContent(this)">${ch.title}</h2>
           
-          ${chapter.sections.map((section, sIdx) => `
-            <div id="section-${section.id}" style="margin-bottom: 40px;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                <h3 class="section-title editable" 
-                    contenteditable="true"
-                    data-chapter="${chapter.id}"
-                    data-section="${section.id}"
-                    data-field="title"
-                    onblur="updateContent(this)">${section.title}</h3>
-                ${chapter.sections.length > 1 ? `
-                  <button class="btn-small btn-delete" onclick="deleteSection('${chapter.id}', '${section.id}')">🗑️</button>
-                ` : ''}
-              </div>
-              <div class="chapter-content editable" 
-                   contenteditable="true"
-                   data-chapter="${chapter.id}"
-                   data-section="${section.id}"
-                   onblur="updateContent(this)">${section.content}</div>
+          ${ch.sections.map(sec => `
+            <div class="mt-12">
+              <h3 class="text-2xl font-bold mb-4 editable" contenteditable="true" data-chapter="${ch.id}" data-section="${sec.id}" data-field="title" onblur="updateContent(this)">${sec.title}</h3>
+              <div class="chapter-content editable" contenteditable="true" data-chapter="${ch.id}" data-section="${sec.id}" onblur="updateContent(this)">${sec.content}</div>
             </div>
           `).join('')}
         </div>
       `).join('');
-      
       updateTOC();
     }
 
-    // Update table of contents
     function updateTOC() {
-      const tocContent = document.getElementById('toc-content');
-      
-      if (bookData.chapters.length === 0) {
-        tocContent.innerHTML = '<p class="empty-state">Aggiungi capitoli per generare l\'indice automaticamente</p>';
-        return;
-      }
-      
-      tocContent.innerHTML = bookData.chapters.map((chapter, idx) => `
-        <div class="toc-item">
-          <strong>${idx + 1}. <a href="#chapter-${chapter.id}" class="toc-link">${chapter.title}</a></strong>
-          ${chapter.sections.map((section, sIdx) => `
-            <div style="margin-left: 24px; margin-top: 4px;">
-              <a href="#section-${section.id}" class="toc-link">${idx + 1}.${sIdx + 1} ${section.title}</a>
-            </div>
-          `).join('')}
+      const toc = document.getElementById('toc-content');
+      toc.innerHTML = bookData.chapters.map((ch, i) => `
+        <div class="toc-row">
+          <span class="font-bold">${i+1}.</span>
+          <a href="#${ch.id}" class="hover:text-blue-600 ml-2">${ch.title}</a>
+          <div class="toc-dots"></div>
         </div>
       `).join('');
     }
 
-    // Export to HTML
     function exportHTML() {
-      const html = `<!DOCTYPE html>
+      // Pulizia prima dell'esportazione
+      const cleanContainer = document.querySelector('.book-container').cloneNode(true);
+      cleanContainer.querySelectorAll('.no-print, .action-buttons').forEach(el => el.remove());
+      cleanContainer.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+      
+      const head = document.head.innerHTML;
+      const finalHtml = `
+<!DOCTYPE html>
 <html lang="it">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${bookData.title}</title>
-  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      line-height: 1.8;
-      color: #334155;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 40px 20px;
-      background: #fafaf9;
-    }
-    .page {
-      background: white;
-      padding: 60px 80px;
-      margin-bottom: 40px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      page-break-after: always;
-    }
-    .cover {
-      text-align: center;
-      min-height: 500px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    h1 {
-      font-family: 'Merriweather', serif;
-      font-size: 48px;
-      font-weight: 700;
-      color: #0c4a6e;
-      margin-bottom: 16px;
-    }
-    h2 {
-      font-family: 'Merriweather', serif;
-      font-size: 36px;
-      font-weight: 700;
-      color: #0c4a6e;
-      margin-bottom: 16px;
-    }
-    h3 {
-      font-family: 'Merriweather', serif;
-      font-size: 24px;
-      font-weight: 700;
-      color: #0c4a6e;
-      margin: 32px 0 16px;
-    }
-    .subtitle { font-size: 20px; color: #64748b; margin-bottom: 60px; }
-    .author { font-size: 16px; color: #94a3b8; font-weight: 500; }
-    .chapter-number { font-size: 14px; color: #0369a1; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-    .toc-item { margin: 12px 0; }
-    .toc-link { color: #0369a1; text-decoration: none; font-weight: 500; }
-    p { margin: 16px 0; }
-    @media print {
-      body { background: white; }
-      .page { box-shadow: none; }
-    }
-  </style>
-</head>
-<body>
-  <div class="page cover">
-    <div style="font-size: 64px; margin-bottom: 40px;">📚</div>
-    <h1>${bookData.title}</h1>
-    <p class="subtitle">${bookData.subtitle}</p>
-    <p class="author">${bookData.author}</p>
-  </div>
-
-  <div class="page">
-    <h2 style="margin-bottom: 32px; padding-bottom: 16px; border-bottom: 2px solid #e7e5e4;">Indice</h2>
-    ${bookData.chapters.map((chapter, idx) => `
-      <div class="toc-item">
-        <strong>${idx + 1}. <a href="#chapter-${idx}" class="toc-link">${chapter.title}</a></strong>
-        ${chapter.sections.map((section, sIdx) => `
-          <div style="margin-left: 24px; margin-top: 4px;">
-            <a href="#chapter-${idx}-section-${sIdx}" class="toc-link">${idx + 1}.${sIdx + 1} ${section.title}</a>
-          </div>
-        `).join('')}
-      </div>
-    `).join('')}
-  </div>
-
-  ${bookData.chapters.map((chapter, chIdx) => `
-    <div class="page" id="chapter-${chIdx}">
-      <div class="chapter-number">Capitolo ${chIdx + 1}</div>
-      <h2>${chapter.title}</h2>
-      ${chapter.sections.map((section, sIdx) => `
-        <div id="chapter-${chIdx}-section-${sIdx}">
-          <h3>${section.title}</h3>
-          <div>${section.content}</div>
-        </div>
-      `).join('')}
-    </div>
-  `).join('')}
+<head>${head}<style>.toolbar,.action-buttons{display:none!important;}.book-page{box-shadow:none;border:1px solid #eee;}</style></head>
+<body style="background:white;">
+    <div class="book-container">${cleanContainer.innerHTML}</div>
 </body>
 </html>`;
 
-      const blob = new Blob([html], { type: 'text/html' });
-      const url = URL.createObjectURL(blob);
+      const blob = new Blob([finalHtml], {type: 'text/html'});
       const a = document.createElement('a');
-      a.href = url;
-      a.download = `${bookData.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.html`;
-      document.body.appendChild(a);
+      a.href = URL.createObjectURL(blob);
+      a.download = "mio_libro_esercizi_interattivo.html";
       a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      
-      showToast('✅ Libro esportato con successo!');
     }
 
-    // Show toast notification
-    function showToast(message) {
-      const toast = document.createElement('div');
-      toast.style.cssText = `
-        position: fixed;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: #0c4a6e;
-        color: white;
-        padding: 12px 24px;
-        border-radius: 8px;
-        font-family: 'Inter', sans-serif;
-        font-weight: 500;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        z-index: 1000;
-      `;
-      toast.textContent = message;
-      document.body.appendChild(toast);
-      setTimeout(() => toast.remove(), 3000);
-    }
-
-    // Auto-save on blur
-    document.addEventListener('blur', (e) => {
-      if (e.target.classList.contains('editable')) {
-        updateContent(e.target);
-      }
-    }, true);
-
-    // Initialize
-    loadBook();
-    renderBook();
+    window.onload = loadBook;
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c217b5e7313ed15',t:'MTc2OTExMDM5NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ </body>
 </html>
+
+
